@@ -3,11 +3,13 @@ import { useCVStore } from '../../store/useCVStore';
 import { ModernTemplate } from '../templates/ModernTemplate';
 import { ClassicTemplate } from '../templates/ClassicTemplate';
 import { exportToPDF, exportToDocx } from '../../utils/exportUtils';
+import { translations } from '../../utils/translations';
 import { Download, Printer } from 'lucide-react';
 
 export const PreviewCanvas: React.FC = () => {
   const data = useCVStore();
-  const { templateId } = data;
+  const { templateId, language } = data;
+  const t = translations[language];
 
   const renderTemplate = () => {
     switch (templateId) {
@@ -28,14 +30,14 @@ export const PreviewCanvas: React.FC = () => {
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
         >
           <Printer size={18} />
-          Print / PDF
+          {t.printPdf}
         </button>
         <button
           onClick={() => exportToDocx(data)}
           className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition"
         >
           <Download size={18} />
-          Word (.docx)
+          {t.wordDoc}
         </button>
       </div>
 

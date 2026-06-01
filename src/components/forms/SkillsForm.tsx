@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useCVStore } from '../../store/useCVStore';
+import { translations } from '../../utils/translations';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const SkillsForm: React.FC = () => {
-  const { skills, addSkill, removeSkill } = useCVStore();
+  const { skills, addSkill, removeSkill, language } = useCVStore();
+  const t = translations[language];
   const [newSkill, setNewSkill] = useState('');
 
   const handleAdd = (e: React.FormEvent) => {
@@ -16,12 +18,12 @@ export const SkillsForm: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-bold text-gray-800">Skills</h2>
+      <h2 className="text-xl font-bold text-gray-800">{t.skills}</h2>
       <form onSubmit={handleAdd} className="flex gap-2">
         <input
           value={newSkill}
           onChange={(e) => setNewSkill(e.target.value)}
-          placeholder="Add a skill (e.g. React)"
+          placeholder={t.skillPlaceholder}
           className="flex-1 p-2 border rounded"
         />
         <button

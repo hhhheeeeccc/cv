@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CVState, CVData, CVTemplateId } from '../types/cv';
+import { CVState, CVData, CVTemplateId, Language } from '../types/cv';
 
 const initialState: CVData = {
   personalInfo: {
@@ -21,6 +21,9 @@ const initialState: CVData = {
 export const useCVStore = create<CVState>((set) => ({
   ...initialState,
   templateId: 'modern',
+  language: 'en',
+
+  setLanguage: (language: Language) => set({ language }),
 
   updatePersonalInfo: (info) =>
     set((state) => ({

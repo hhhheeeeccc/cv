@@ -5,24 +5,31 @@ import { EducationForm } from '../forms/EducationForm';
 import { ProjectsForm } from '../forms/ProjectsForm';
 import { SkillsForm } from '../forms/SkillsForm';
 import { TemplateSelector } from '../forms/TemplateSelector';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useCVStore } from '../../store/useCVStore';
+import { translations } from '../../utils/translations';
 import { User, Briefcase, GraduationCap, Code, ListChecks, Layout } from 'lucide-react';
 
-const tabs = [
-  { id: 'templates', label: 'Template', icon: Layout, component: TemplateSelector },
-  { id: 'personal', label: 'Personal', icon: User, component: PersonalInfoForm },
-  { id: 'experience', label: 'Experience', icon: Briefcase, component: ExperienceForm },
-  { id: 'education', label: 'Education', icon: GraduationCap, component: EducationForm },
-  { id: 'projects', label: 'Projects', icon: Code, component: ProjectsForm },
-  { id: 'skills', label: 'Skills', icon: ListChecks, component: SkillsForm },
-];
-
 export const Sidebar: React.FC = () => {
+  const { language } = useCVStore();
+  const t = translations[language];
   const [activeTab, setActiveTab] = useState('templates');
+
+  const tabs = [
+    { id: 'templates', label: t.templates, icon: Layout, component: TemplateSelector },
+    { id: 'personal', label: t.personal, icon: User, component: PersonalInfoForm },
+    { id: 'experience', label: t.experience, icon: Briefcase, component: ExperienceForm },
+    { id: 'education', label: t.education, icon: GraduationCap, component: EducationForm },
+    { id: 'projects', label: t.projects, icon: Code, component: ProjectsForm },
+    { id: 'skills', label: t.skills, icon: ListChecks, component: SkillsForm },
+  ];
 
   const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component || TemplateSelector;
 
   return (
     <div className="w-96 bg-white border-r flex flex-col h-screen print:hidden">
+      <LanguageSwitcher />
+
       <div className="flex border-b overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button

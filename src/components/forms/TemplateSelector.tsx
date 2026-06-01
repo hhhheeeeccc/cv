@@ -1,18 +1,20 @@
 import React from 'react';
 import { useCVStore } from '../../store/useCVStore';
+import { translations } from '../../utils/translations';
 import { CVTemplateId } from '../../types/cv';
 
 export const TemplateSelector: React.FC = () => {
-  const { templateId, setTemplate } = useCVStore();
+  const { templateId, setTemplate, language } = useCVStore();
+  const t = translations[language];
 
   const templates: { id: CVTemplateId; name: string }[] = [
-    { id: 'modern', name: 'Modern' },
-    { id: 'classic', name: 'Classic' },
+    { id: 'modern', name: t.modern },
+    { id: 'classic', name: t.classic },
   ];
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-gray-800">Select Template</h2>
+      <h2 className="text-xl font-bold text-gray-800">{t.selectTemplate}</h2>
       <div className="grid grid-cols-2 gap-4">
         {templates.map((t) => (
           <button

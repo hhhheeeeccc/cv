@@ -1,9 +1,11 @@
 import React from 'react';
 import { useCVStore } from '../../store/useCVStore';
+import { translations } from '../../utils/translations';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const EducationForm: React.FC = () => {
-  const { education, addEducation, updateEducation, removeEducation } = useCVStore();
+  const { education, addEducation, updateEducation, removeEducation, language } = useCVStore();
+  const t = translations[language];
 
   const handleAdd = () => {
     addEducation({
@@ -19,7 +21,7 @@ export const EducationForm: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">Education</h2>
+        <h2 className="text-xl font-bold text-gray-800">{t.education}</h2>
         <button
           onClick={handleAdd}
           className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
@@ -38,32 +40,32 @@ export const EducationForm: React.FC = () => {
           <input
             value={edu.school}
             onChange={(e) => updateEducation(edu.id, { school: e.target.value })}
-            placeholder="School"
+            placeholder={t.school}
             className="w-full p-2 border rounded"
           />
           <input
             value={edu.degree}
             onChange={(e) => updateEducation(edu.id, { degree: e.target.value })}
-            placeholder="Degree"
+            placeholder={t.degree}
             className="w-full p-2 border rounded"
           />
           <input
             value={edu.fieldOfStudy}
             onChange={(e) => updateEducation(edu.id, { fieldOfStudy: e.target.value })}
-            placeholder="Field of Study"
+            placeholder={t.fieldOfStudy}
             className="w-full p-2 border rounded"
           />
           <div className="grid grid-cols-2 gap-4">
             <input
               value={edu.startDate}
               onChange={(e) => updateEducation(edu.id, { startDate: e.target.value })}
-              placeholder="Start Date"
+              placeholder={t.startDate}
               className="p-2 border rounded"
             />
             <input
               value={edu.endDate}
               onChange={(e) => updateEducation(edu.id, { endDate: e.target.value })}
-              placeholder="End Date"
+              placeholder={t.endDate}
               className="p-2 border rounded"
             />
           </div>

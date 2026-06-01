@@ -1,5 +1,7 @@
 import React from 'react';
 import { CVData } from '../../types/cv';
+import { useCVStore } from '../../store/useCVStore';
+import { translations } from '../../utils/translations';
 
 interface Props {
   data: CVData;
@@ -7,47 +9,40 @@ interface Props {
 
 export const ModernTemplate: React.FC<Props> = ({ data }) => {
   const { personalInfo, experiences, education, projects, skills } = data;
+  const { language } = useCVStore();
+  const t = translations[language];
 
   return (
     <div className="p-8 h-full bg-white text-gray-800 font-sans flex flex-col gap-6">
-      {/* Header */}
       <header className="border-b-2 border-blue-600 pb-4">
         <h1 className="text-4xl font-bold uppercase tracking-wider text-blue-800">
-          {personalInfo.fullName || 'Your Name'}
+          {personalInfo.fullName || t.fullName}
         </h1>
         <p className="text-xl text-blue-600 font-medium">
-          {personalInfo.jobTitle || 'Target Job Title'}
+          {personalInfo.jobTitle || t.jobTitle}
         </p>
         <div className="mt-2 text-sm text-gray-600 flex flex-wrap gap-4">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>{personalInfo.phone}</span>}
           {personalInfo.address && <span>{personalInfo.address}</span>}
-          {personalInfo.website && (
-            <a href={personalInfo.website} className="text-blue-500 hover:underline">
-              {personalInfo.website}
-            </a>
-          )}
         </div>
       </header>
 
-      {/* Summary */}
       {personalInfo.summary && (
         <section>
           <h2 className="text-lg font-bold text-blue-800 uppercase border-b border-gray-200 mb-2">
-            Professional Summary
+            {t.summary}
           </h2>
           <p className="text-sm leading-relaxed">{personalInfo.summary}</p>
         </section>
       )}
 
       <div className="grid grid-cols-3 gap-8 flex-1">
-        {/* Main Column */}
         <div className="col-span-2 flex flex-col gap-6">
-          {/* Experience */}
           {experiences.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-blue-800 uppercase border-b border-gray-200 mb-3">
-                Experience
+                {t.experience}
               </h2>
               <div className="flex flex-col gap-4">
                 {experiences.map((exp) => (
@@ -66,21 +61,15 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
             </section>
           )}
 
-          {/* Projects */}
           {projects.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-blue-800 uppercase border-b border-gray-200 mb-3">
-                Projects
+                {t.projects}
               </h2>
               <div className="flex flex-col gap-4">
                 {projects.map((project) => (
                   <div key={project.id}>
                     <h3 className="font-bold text-gray-900">{project.name}</h3>
-                    {project.link && (
-                      <a href={project.link} className="text-xs text-blue-500 mb-1 block">
-                        {project.link}
-                      </a>
-                    )}
                     <p className="text-sm whitespace-pre-wrap">{project.description}</p>
                   </div>
                 ))}
@@ -89,13 +78,11 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
           )}
         </div>
 
-        {/* Sidebar */}
         <div className="col-span-1 flex flex-col gap-6">
-          {/* Skills */}
           {skills.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-blue-800 uppercase border-b border-gray-200 mb-3">
-                Skills
+                {t.skills}
               </h2>
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill) => (
@@ -110,11 +97,10 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
             </section>
           )}
 
-          {/* Education */}
           {education.length > 0 && (
             <section>
               <h2 className="text-lg font-bold text-blue-800 uppercase border-b border-gray-200 mb-3">
-                Education
+                {t.education}
               </h2>
               <div className="flex flex-col gap-4">
                 {education.map((edu) => (

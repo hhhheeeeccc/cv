@@ -49,9 +49,12 @@ export interface CVData {
 }
 
 export type CVTemplateId = 'modern' | 'classic' | 'tech';
+export type Language = 'en' | 'ar';
 
 export interface CVState extends CVData {
   templateId: CVTemplateId;
+  language: Language;
+  setLanguage: (lang: Language) => void;
   updatePersonalInfo: (info: Partial<PersonalInfo>) => void;
   addExperience: (exp: Experience) => void;
   updateExperience: (id: string, exp: Partial<Experience>) => void;

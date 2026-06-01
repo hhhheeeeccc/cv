@@ -1,8 +1,10 @@
 import React from 'react';
 import { useCVStore } from '../../store/useCVStore';
+import { translations } from '../../utils/translations';
 
 export const PersonalInfoForm: React.FC = () => {
-  const { personalInfo, updatePersonalInfo } = useCVStore();
+  const { personalInfo, updatePersonalInfo, language } = useCVStore();
+  const t = translations[language];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -11,20 +13,20 @@ export const PersonalInfoForm: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-gray-800">Personal Information</h2>
+      <h2 className="text-xl font-bold text-gray-800">{t.personalInfo}</h2>
       <div className="grid grid-cols-1 gap-4">
         <input
           name="fullName"
           value={personalInfo.fullName}
           onChange={handleChange}
-          placeholder="Full Name"
+          placeholder={t.fullName}
           className="w-full p-2 border rounded"
         />
         <input
           name="jobTitle"
           value={personalInfo.jobTitle}
           onChange={handleChange}
-          placeholder="Professional Title"
+          placeholder={t.jobTitle}
           className="w-full p-2 border rounded"
         />
         <div className="grid grid-cols-2 gap-4">
@@ -32,14 +34,14 @@ export const PersonalInfoForm: React.FC = () => {
             name="email"
             value={personalInfo.email}
             onChange={handleChange}
-            placeholder="Email"
+            placeholder={t.email}
             className="p-2 border rounded"
           />
           <input
             name="phone"
             value={personalInfo.phone}
             onChange={handleChange}
-            placeholder="Phone"
+            placeholder={t.phone}
             className="p-2 border rounded"
           />
         </div>
@@ -47,21 +49,21 @@ export const PersonalInfoForm: React.FC = () => {
           name="address"
           value={personalInfo.address}
           onChange={handleChange}
-          placeholder="Address"
+          placeholder={t.address}
           className="w-full p-2 border rounded"
         />
         <input
           name="website"
           value={personalInfo.website}
           onChange={handleChange}
-          placeholder="Website/LinkedIn"
+          placeholder={t.website}
           className="w-full p-2 border rounded"
         />
         <textarea
           name="summary"
           value={personalInfo.summary}
           onChange={handleChange}
-          placeholder="Professional Summary"
+          placeholder={t.summary}
           rows={4}
           className="w-full p-2 border rounded"
         />
