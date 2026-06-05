@@ -8,12 +8,17 @@ import { TemplateSelector } from '../forms/TemplateSelector';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useCVStore } from '../../store/useCVStore';
 import { translations } from '../../utils/translations';
-import { User, Briefcase, GraduationCap, Code, ListChecks, Layout } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Code, ListChecks, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const { language } = useCVStore();
   const t = translations[language];
   const [activeTab, setActiveTab] = useState('templates');
+  const dir = language === 'ar' ? 'rtl' : 'ltr';
 
   const tabs = [
     { id: 'templates', label: t.templates, icon: Layout, component: TemplateSelector },
@@ -27,32 +32,47 @@ export const Sidebar: React.FC = () => {
   const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component || TemplateSelector;
 
   return (
-    <div className="w-96 bg-white border-r flex flex-col h-screen print:hidden">
-      <LanguageSwitcher />
+    <div className="flex flex-col h-full bg-white overflow-hidden relative">
+      <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+          {language === 'ar' ? 'مصمم السيرة' : 'CV Pro'}
+        </h1>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          {onClose && (
+            <button onClick={onClose} className="md:hidden p-1 text-slate-400 hover:text-slate-600">
+              {dir === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
+            </button>
+          )}
+        </div>
+      </div>
 
-      <div className="flex border-b overflow-x-auto no-scrollbar">
+      <div className="flex border-b border-slate-100 overflow-x-auto no-scrollbar scroll-smooth">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-none w-20 p-4 flex flex-col items-center gap-1 border-b-2 transition ${
+            className={`flex-none w-20 py-3 flex flex-col items-center gap-1 border-b-2 transition-all duration-300 ${
               activeTab === tab.id
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-indigo-600 text-indigo-600 bg-indigo-50/50'
+                : 'border-transparent text-slate-400 hover:text-slate-600 hover:bg-slate-50'
             }`}
           >
-            <tab.icon size={20} />
-            <span className="text-[9px] font-bold uppercase">{tab.label}</span>
+            <tab.icon size={20} className={activeTab === tab.id ? 'animate-pulse' : ''} />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-center">{tab.label}</span>
           </button>
         ))}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
-        <ActiveComponent />
+      <div className="flex-1 overflow-y-auto p-6 bg-slate-50/30">
+        <div className="max-w-md mx-auto">
+          <ActiveComponent />
+        </div>
       </div>
 
-      <div className="p-4 bg-gray-50 border-t text-[10px] text-gray-400 text-center">
-        CV Builder v1.0 • Built with Clean Architecture
+      <div className="p-4 bg-white border-t border-slate-100 text-[10px] text-slate-400 flex justify-between items-center">
+        <span>CV Builder v2.0</span>
+        <span className="font-medium text-indigo-500">Premium Pro</span>
       </div>
     </div>
   );
