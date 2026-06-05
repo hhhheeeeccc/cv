@@ -23,35 +23,47 @@ export const PreviewCanvas: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 bg-gray-200 p-8 overflow-y-auto flex flex-col items-center">
-      <div className="mb-6 flex gap-4 print:hidden">
-        <button
-          onClick={() => exportToPDF()}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
-        >
-          <Printer size={18} />
-          {t.printPdf}
-        </button>
-        <button
-          onClick={() => exportToDocx(data)}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition"
-        >
-          <Download size={18} />
-          {t.wordDoc}
-        </button>
+    <div className="flex min-h-0 flex-1 flex-col bg-muted">
+      {/* Toolbar */}
+      <div className="flex flex-none items-center justify-between gap-3 border-b border-border bg-card/80 px-4 py-3 backdrop-blur sm:px-6 print:hidden">
+        <span className="hidden text-xs font-medium text-muted-foreground sm:block">
+          {t.livePreview}
+        </span>
+        <div className="flex w-full gap-2 sm:w-auto">
+          <button
+            onClick={() => exportToPDF()}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition hover:opacity-90 sm:flex-none"
+          >
+            <Printer size={16} />
+            {t.printPdf}
+          </button>
+          <button
+            onClick={() => exportToDocx(data)}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground shadow-soft transition hover:bg-muted sm:flex-none"
+          >
+            <Download size={16} />
+            {t.wordDoc}
+          </button>
+        </div>
       </div>
 
-      <div
-        id="cv-preview"
-        className="bg-white shadow-2xl origin-top print:shadow-none print:m-0 mb-8"
-        style={{
-          width: '210mm',
-          minHeight: '297mm',
-          padding: '0',
-          boxSizing: 'border-box',
-        }}
-      >
-        {renderTemplate()}
+      {/* Scrollable sheet area */}
+      <div className="flex-1 overflow-auto p-4 sm:p-8">
+        <div className="mx-auto w-full max-w-[210mm]">
+          {/* Responsive A4 wrapper: the sheet keeps A4 ratio and scales down on small screens */}
+          <div
+            id="cv-preview"
+            dir={language === 'ar' ? 'rtl' : 'ltr'}
+            className="mx-auto overflow-hidden rounded-lg bg-white shadow-sheet print:rounded-none print:shadow-none"
+            style={{
+              width: '210mm',
+              minHeight: '297mm',
+              maxWidth: '100%',
+            }}
+          >
+            {renderTemplate()}
+          </div>
+        </div>
       </div>
     </div>
   );

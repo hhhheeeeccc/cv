@@ -3,8 +3,63 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Neutral slate base */
+    --background: #f1f5f9;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --muted: #f8fafc;
+    --muted-foreground: #64748b;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+
+    /* Primary brand: deep professional indigo-navy */
+    --primary: #1e3a5f;
+    --primary-foreground: #ffffff;
+
+    /* Accent: warm amber for subtle highlights */
+    --accent: #c2823a;
+    --accent-foreground: #ffffff;
+
+    --ring: #1e3a5f;
+    --radius: 0.75rem;
+
+    --font-sans: "Inter";
+    --font-serif: "Lora";
+  }
+
+  /* Arabic typography */
+  [dir="rtl"] {
+    --font-sans: "Tajawal";
+    --font-serif: "Cairo";
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    background-color: var(--background);
+  }
+
   body {
-    @apply bg-gray-100 antialiased;
+    @apply bg-background text-foreground antialiased font-sans;
+  }
+}
+
+@layer components {
+  .field-label {
+    @apply block text-xs font-semibold text-muted-foreground mb-1.5 tracking-wide;
+  }
+
+  .field-input {
+    @apply w-full px-3.5 py-2.5 text-sm bg-card border border-input rounded-lg
+      text-foreground placeholder:text-muted-foreground
+      focus:outline-none focus:ring-2 focus:border-ring
+      transition-all duration-150;
+  }
+  .field-input:focus {
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.15);
   }
 }
 
@@ -24,17 +79,28 @@
 
   #cv-preview {
     width: 210mm !important;
-    height: 297mm !important;
+    min-height: 297mm !important;
     margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
     transform: none !important;
+    border-radius: 0 !important;
   }
 }
 
-/* Custom scrollbar for Sidebar */
+/* Hide scrollbar utility for tab strip */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

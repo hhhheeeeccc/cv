@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCVStore } from '../../store/useCVStore';
 import { translations } from '../../utils/translations';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 export const SkillsForm: React.FC = () => {
   const { skills, addSkill, removeSkill, language } = useCVStore();
@@ -17,38 +17,51 @@ export const SkillsForm: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold text-gray-800">{t.skills}</h2>
+    <div className="space-y-5">
+      <div>
+        <h2 className="text-lg font-bold text-foreground">{t.skills}</h2>
+        <p className="mt-0.5 text-xs text-muted-foreground">{t.skillPlaceholder}</p>
+      </div>
+
       <form onSubmit={handleAdd} className="flex gap-2">
         <input
           value={newSkill}
           onChange={(e) => setNewSkill(e.target.value)}
           placeholder={t.skillPlaceholder}
-          className="flex-1 p-2 border rounded"
+          className="field-input flex-1"
         />
         <button
           type="submit"
-          className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="flex flex-none items-center justify-center rounded-lg bg-primary px-3.5 text-primary-foreground shadow-soft transition hover:opacity-90"
+          aria-label={t.add}
         >
-          <Plus size={20} />
+          <Plus size={18} />
         </button>
       </form>
-      <div className="flex flex-wrap gap-2">
-        {skills.map((skill) => (
-          <div
-            key={skill.id}
-            className="flex items-center gap-2 px-3 py-1 bg-gray-100 border rounded-full group"
-          >
-            <span className="text-sm">{skill.name}</span>
-            <button
-              onClick={() => removeSkill(skill.id)}
-              className="text-gray-400 hover:text-red-500"
+
+      {skills.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-border py-10 text-center">
+          <p className="px-6 text-xs text-muted-foreground">{t.noItems}</p>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {skills.map((skill) => (
+            <div
+              key={skill.id}
+              className="group flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1.5 text-sm text-foreground"
             >
-              <Trash2 size={14} />
-            </button>
-          </div>
-        ))}
-      </div>
+              <span>{skill.name}</span>
+              <button
+                onClick={() => removeSkill(skill.id)}
+                className="text-muted-foreground transition hover:text-red-500"
+                aria-label="Remove"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

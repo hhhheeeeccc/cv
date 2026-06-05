@@ -50,10 +50,13 @@ export interface CVData {
 
 export type CVTemplateId = 'modern' | 'classic' | 'tech';
 export type Language = 'en' | 'ar';
+export type MobileView = 'editor' | 'preview';
 
 export interface CVState extends CVData {
   templateId: CVTemplateId;
   language: Language;
+  mobileView: MobileView;
+  setMobileView: (view: MobileView) => void;
   setLanguage: (lang: Language) => void;
   updatePersonalInfo: (info: Partial<PersonalInfo>) => void;
   addExperience: (exp: Experience) => void;

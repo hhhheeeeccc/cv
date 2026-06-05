@@ -8,7 +8,7 @@ import { TemplateSelector } from '../forms/TemplateSelector';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useCVStore } from '../../store/useCVStore';
 import { translations } from '../../utils/translations';
-import { User, Briefcase, GraduationCap, Code, ListChecks, Layout } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Code, ListChecks, LayoutTemplate } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
   const { language } = useCVStore();
@@ -16,7 +16,7 @@ export const Sidebar: React.FC = () => {
   const [activeTab, setActiveTab] = useState('templates');
 
   const tabs = [
-    { id: 'templates', label: t.templates, icon: Layout, component: TemplateSelector },
+    { id: 'templates', label: t.templates, icon: LayoutTemplate, component: TemplateSelector },
     { id: 'personal', label: t.personal, icon: User, component: PersonalInfoForm },
     { id: 'experience', label: t.experience, icon: Briefcase, component: ExperienceForm },
     { id: 'education', label: t.education, icon: GraduationCap, component: EducationForm },
@@ -24,35 +24,41 @@ export const Sidebar: React.FC = () => {
     { id: 'skills', label: t.skills, icon: ListChecks, component: SkillsForm },
   ];
 
-  const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component || TemplateSelector;
+  const ActiveComponent =
+    tabs.find((tab) => tab.id === activeTab)?.component || TemplateSelector;
 
   return (
-    <div className="w-96 bg-white border-r flex flex-col h-screen print:hidden">
+    <div className="flex h-full w-full flex-col border-border bg-card ltr:border-r rtl:border-l print:hidden">
       <LanguageSwitcher />
 
-      <div className="flex border-b overflow-x-auto no-scrollbar">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-none w-20 p-4 flex flex-col items-center gap-1 border-b-2 transition ${
-              activeTab === tab.id
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            <tab.icon size={20} />
-            <span className="text-[9px] font-bold uppercase">{tab.label}</span>
-          </button>
-        ))}
-      </div>
+      {/* Tab strip */}
+      <nav className="no-scrollbar flex flex-none gap-1 overflow-x-auto border-b border-border px-2 py-2">
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex flex-none flex-col items-center gap-1 rounded-lg px-3 py-2 transition ${
+                isActive
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              <tab.icon size={18} strokeWidth={2} />
+              <span className="text-[10px] font-semibold">{tab.label}</span>
+            </button>
+          );
+        })}
+      </nav>
 
-      <div className="flex-1 overflow-y-auto p-6">
+      {/* Active form */}
+      <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">
         <ActiveComponent />
       </div>
 
-      <div className="p-4 bg-gray-50 border-t text-[10px] text-gray-400 text-center">
-        CV Builder v1.0 • Built with Clean Architecture
+      <div className="flex-none border-t border-border bg-muted px-4 py-3 text-center text-[10px] text-muted-foreground">
+        {t.footer}
       </div>
     </div>
   );

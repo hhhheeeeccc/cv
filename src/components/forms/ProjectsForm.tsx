@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCVStore } from '../../store/useCVStore';
 import { translations } from '../../utils/translations';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Code } from 'lucide-react';
 
 export const ProjectsForm: React.FC = () => {
   const { projects, addProject, updateProject, removeProject, language } = useCVStore();
@@ -17,45 +17,72 @@ export const ProjectsForm: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">{t.projects}</h2>
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold text-foreground">{t.projects}</h2>
         <button
           onClick={handleAdd}
-          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+          className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground shadow-soft transition hover:opacity-90"
         >
-          <Plus size={20} />
+          <Plus size={15} />
+          {t.add}
         </button>
       </div>
-      {projects.map((p) => (
-        <div key={p.id} className="p-4 border rounded relative space-y-4">
-          <button
-            onClick={() => removeProject(p.id)}
-            className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-          >
-            <Trash2 size={18} />
-          </button>
-          <input
-            value={p.name}
-            onChange={(e) => updateProject(p.id, { name: e.target.value })}
-            placeholder={t.projectName}
-            className="w-full p-2 border rounded"
-          />
-          <input
-            value={p.link}
-            onChange={(e) => updateProject(p.id, { link: e.target.value })}
-            placeholder={t.projectLink}
-            className="w-full p-2 border rounded"
-          />
-          <textarea
-            value={p.description}
-            onChange={(e) => updateProject(p.id, { description: e.target.value })}
-            placeholder={t.description}
-            rows={3}
-            className="w-full p-2 border rounded"
-          />
+
+      {projects.length === 0 && (
+        <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border py-10 text-center">
+          <Code size={24} className="text-muted-foreground/50" />
+          <p className="px-6 text-xs text-muted-foreground">{t.noItems}</p>
         </div>
-      ))}
+      )}
+
+      <div className="space-y-4">
+        {projects.map((p) => (
+          <div
+            key={p.id}
+            className="relative space-y-3 rounded-xl border border-border bg-muted/40 p-4"
+          >
+            <button
+              onClick={() => removeProject(p.id)}
+              className="absolute top-3 text-muted-foreground transition hover:text-red-500 ltr:right-3 rtl:left-3"
+              aria-label="Remove"
+            >
+              <Trash2 size={16} />
+            </button>
+
+            <div className="ltr:pr-7 rtl:pl-7">
+              <label className="field-label">{t.projectName}</label>
+              <input
+                value={p.name}
+                onChange={(e) => updateProject(p.id, { name: e.target.value })}
+                placeholder={t.projectName}
+                className="field-input"
+              />
+            </div>
+
+            <div>
+              <label className="field-label">{t.projectLink}</label>
+              <input
+                value={p.link}
+                onChange={(e) => updateProject(p.id, { link: e.target.value })}
+                placeholder={t.projectLink}
+                className="field-input"
+              />
+            </div>
+
+            <div>
+              <label className="field-label">{t.description}</label>
+              <textarea
+                value={p.description}
+                onChange={(e) => updateProject(p.id, { description: e.target.value })}
+                placeholder={t.description}
+                rows={3}
+                className="field-input resize-none leading-relaxed"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

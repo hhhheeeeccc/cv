@@ -22,6 +22,9 @@ export const useCVStore = create<CVState>((set) => ({
   ...initialState,
   templateId: 'modern',
   language: 'en',
+  mobileView: 'editor',
+
+  setMobileView: (mobileView) => set({ mobileView }),
 
   setLanguage: (language: Language) => set({ language }),
 
