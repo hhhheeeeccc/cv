@@ -2,7 +2,7 @@ import React from 'react';
 import { CVData } from '../../types/cv';
 import { useCVStore } from '../../store/useCVStore';
 import { translations } from '../../utils/translations';
-import { Mail, Phone, MapPin, Globe, Award, Briefcase, GraduationCap, Code2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Award, Briefcase, Code2 } from 'lucide-react';
 
 interface Props {
   data: CVData;
