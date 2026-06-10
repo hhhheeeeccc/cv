@@ -7,3 +7,8 @@
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
+9:14:23 PM [vite] page reload src/types/cv.ts
+9:14:23 PM [vite] hmr update /src/index.css, /src/components/layout/Sidebar.tsx, /src/components/layout/PreviewCanvas.tsx, /src/components/forms/EducationForm.tsx, /src/components/forms/SkillsForm.tsx, /src/components/forms/ProjectsForm.tsx, /src/components/forms/TemplateSelector.tsx, /src/components/forms/PersonalInfoForm.tsx, /src/components/forms/ExperienceForm.tsx, /src/components/templates/ClassicTemplate.tsx, /src/components/templates/ModernTemplate.tsx
+9:14:23 PM [vite] hmr update /src/components/forms/TemplateSelector.tsx, /src/index.css
+9:14:23 PM [vite] hmr update /src/components/layout/PreviewCanvas.tsx, /src/index.css
+9:21:50 PM [vite] hmr update /src/components/layout/MainLayout.tsx, /src/index.css

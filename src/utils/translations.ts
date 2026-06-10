@@ -34,9 +34,12 @@ export const translations = {
     wordDoc: 'Word (.docx)',
     modern: 'Modern',
     classic: 'Classic',
+    ats: 'ATS Friendly',
     deleteEntry: 'Delete Entry',
     confirmDelete: 'Are you sure you want to delete this entry?',
     remove: 'Remove',
+    edit: 'Edit',
+    preview: 'Preview',
   },
   ar: {
     personal: 'الشخصي',
@@ -73,9 +76,12 @@ export const translations = {
     wordDoc: 'ملف وورد (.docx)',
     modern: 'عصري',
     classic: 'كلاسيكي',
+    ats: 'نظام التوظيف (ATS)',
     deleteEntry: 'حذف الإدخال',
     confirmDelete: 'هل أنت متأكد من حذف هذا الإدخال؟',
     remove: 'إزالة',
+    edit: 'تعديل',
+    preview: 'معاينة',
   }
 };
 
