@@ -20,6 +20,7 @@ export const PersonalInfoForm: React.FC = () => {
           value={personalInfo.fullName}
           onChange={handleChange}
           placeholder={t.fullName}
+          aria-label={t.fullName}
           className="w-full p-2 border rounded"
         />
         <input
@@ -27,6 +28,7 @@ export const PersonalInfoForm: React.FC = () => {
           value={personalInfo.jobTitle}
           onChange={handleChange}
           placeholder={t.jobTitle}
+          aria-label={t.jobTitle}
           className="w-full p-2 border rounded"
         />
         <div className="grid grid-cols-2 gap-4">
@@ -35,6 +37,7 @@ export const PersonalInfoForm: React.FC = () => {
             value={personalInfo.email}
             onChange={handleChange}
             placeholder={t.email}
+            aria-label={t.email}
             className="p-2 border rounded"
           />
           <input
@@ -42,6 +45,7 @@ export const PersonalInfoForm: React.FC = () => {
             value={personalInfo.phone}
             onChange={handleChange}
             placeholder={t.phone}
+            aria-label={t.phone}
             className="p-2 border rounded"
           />
         </div>
@@ -50,6 +54,7 @@ export const PersonalInfoForm: React.FC = () => {
           value={personalInfo.address}
           onChange={handleChange}
           placeholder={t.address}
+          aria-label={t.address}
           className="w-full p-2 border rounded"
         />
         <input
@@ -57,6 +62,7 @@ export const PersonalInfoForm: React.FC = () => {
           value={personalInfo.website}
           onChange={handleChange}
           placeholder={t.website}
+          aria-label={t.website}
           className="w-full p-2 border rounded"
         />
         <textarea
@@ -64,6 +70,7 @@ export const PersonalInfoForm: React.FC = () => {
           value={personalInfo.summary}
           onChange={handleChange}
           placeholder={t.summary}
+          aria-label={t.summary}
           rows={4}
           className="w-full p-2 border rounded"
         />

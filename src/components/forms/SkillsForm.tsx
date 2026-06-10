@@ -24,11 +24,13 @@ export const SkillsForm: React.FC = () => {
           value={newSkill}
           onChange={(e) => setNewSkill(e.target.value)}
           placeholder={t.skillPlaceholder}
+          aria-label={t.skillPlaceholder}
           className="flex-1 p-2 border rounded"
         />
         <button
           type="submit"
-          className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          aria-label={t.addSkill}
+          className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
         >
           <Plus size={20} />
         </button>
@@ -37,12 +39,13 @@ export const SkillsForm: React.FC = () => {
         {skills.map((skill) => (
           <div
             key={skill.id}
-            className="flex items-center gap-2 px-3 py-1 bg-gray-100 border rounded-full group"
+            className="flex items-center gap-2 px-3 py-1 bg-gray-100 border rounded-full group hover:bg-gray-200 transition-colors"
           >
             <span className="text-sm">{skill.name}</span>
             <button
               onClick={() => removeSkill(skill.id)}
-              className="text-gray-400 hover:text-red-500"
+              aria-label={`${t.remove} ${skill.name}`}
+              className="text-gray-400 hover:text-red-500 transition-colors"
             >
               <Trash2 size={14} />
             </button>

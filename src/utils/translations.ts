@@ -34,6 +34,9 @@ export const translations = {
     wordDoc: 'Word (.docx)',
     modern: 'Modern',
     classic: 'Classic',
+    deleteEntry: 'Delete Entry',
+    confirmDelete: 'Are you sure you want to delete this entry?',
+    remove: 'Remove',
   },
   ar: {
     personal: 'الشخصي',
@@ -70,6 +73,9 @@ export const translations = {
     wordDoc: 'ملف وورد (.docx)',
     modern: 'عصري',
     classic: 'كلاسيكي',
+    deleteEntry: 'حذف الإدخال',
+    confirmDelete: 'هل أنت متأكد من حذف هذا الإدخال؟',
+    remove: 'إزالة',
   }
 };
 
