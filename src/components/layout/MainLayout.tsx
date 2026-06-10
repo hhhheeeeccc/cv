@@ -27,7 +27,7 @@ export const MainLayout: React.FC = () => {
       <button
         onClick={() => setMobileView(mobileView === 'edit' ? 'preview' : 'edit')}
         aria-label={mobileView === 'edit' ? t.preview : t.edit}
-        className="md:hidden fixed bottom-6 right-6 z-50 p-4 bg-blue-600 text-white rounded-full shadow-2xl flex items-center gap-2 font-bold transition-transform active:scale-95 animate-bounce-subtle"
+        className={`md:hidden fixed bottom-6 ${dir === 'rtl' ? 'left-6' : 'right-6'} z-50 p-4 bg-blue-600 text-white rounded-full shadow-2xl flex items-center gap-2 font-bold transition-transform active:scale-95 animate-bounce-subtle`}
       >
         {mobileView === 'edit' ? (
           <>

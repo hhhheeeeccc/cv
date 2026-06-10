@@ -5,3 +5,7 @@
 ## 2025-06-10 - [ATS & Mobile Responsiveness]
 **Learning:** For a CV builder, "ATS compatibility" is a major user requirement that dictates a specific, minimalistic layout pattern. Additionally, viewing a fixed-width A4 document on mobile requires dynamic scaling (CSS transform) and a dedicated preview mode to ensure usability on small screens.
 **Action:** Offer a dedicated ATS template with single-column layout and standard headers. Implement automatic viewport-based scaling for preview components to maintain visual fidelity across devices.
+
+## 2025-06-10 - [Advanced Mobile Preview Scaling]
+**Learning:** Scaling a fixed-size document (A4) for mobile preview requires not just a CSS transform, but also a parent container that correctly calculates its height based on the scale factor (e.g., `297mm * scale`). Using `ResizeObserver` is the most reliable way to handle dynamic viewport changes and ensure the scale is always accurate.
+**Action:** Always wrap transformed/scaled document previews in a container that explicitly handles the scaled dimensions to prevent layout overlaps and ensure scrollability.
