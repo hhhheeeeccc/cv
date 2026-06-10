@@ -14,8 +14,20 @@
     margin: 0;
   }
 
-  body {
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
     background-color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .App, #root, div:has(> #cv-preview) {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
   }
 
   .print\:hidden {
@@ -29,6 +41,8 @@
     padding: 0 !important;
     box-shadow: none !important;
     transform: none !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
   }
 }
 

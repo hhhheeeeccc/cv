@@ -54,7 +54,7 @@ export const PreviewCanvas: React.FC = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="flex-1 bg-gray-200 p-4 md:p-8 overflow-y-auto flex flex-col items-center no-scrollbar overflow-x-hidden relative">
+    <div ref={containerRef} className="flex-1 bg-gray-200 p-4 md:p-8 print:p-0 overflow-y-auto flex flex-col items-center no-scrollbar overflow-x-hidden relative">
       {/* Responsive Header Buttons */}
       <div className="mb-6 flex justify-center gap-2 md:gap-4 print:hidden sticky top-0 z-10 w-full max-w-2xl bg-gray-200/80 backdrop-blur-sm p-2 rounded-lg">
         <button
@@ -75,7 +75,7 @@ export const PreviewCanvas: React.FC = () => {
 
       {/* CV Wrapper with Dynamic Height */}
       <div
-        className="w-full flex justify-center pb-20"
+        className="w-full flex justify-center pb-20 print:pb-0 print:h-auto"
         style={{
           height: `${297 * scale}mm`,
           minHeight: `${297 * scale}mm`,
