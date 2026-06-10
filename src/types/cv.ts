@@ -48,7 +48,7 @@ export interface CVData {
   languages: string[];
 }
 
-export type CVTemplateId = 'modern' | 'classic' | 'tech';
+export type CVTemplateId = 'modern' | 'classic' | 'ats';
 export type Language = 'en' | 'ar';
 
 export interface CVState extends CVData {

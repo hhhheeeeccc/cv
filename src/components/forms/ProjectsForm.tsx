@@ -16,22 +16,30 @@ export const ProjectsForm: React.FC = () => {
     });
   };
 
+  const handleRemove = (id: string) => {
+    if (window.confirm(t.confirmDelete)) {
+      removeProject(id);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-gray-800">{t.projects}</h2>
         <button
           onClick={handleAdd}
-          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
+          aria-label={t.addProject}
+          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
         >
           <Plus size={20} />
         </button>
       </div>
       {projects.map((p) => (
-        <div key={p.id} className="p-4 border rounded relative space-y-4">
+        <div key={p.id} className="p-4 border rounded relative space-y-4 bg-white shadow-sm">
           <button
-            onClick={() => removeProject(p.id)}
-            className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+            onClick={() => handleRemove(p.id)}
+            aria-label={t.deleteEntry}
+            className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors"
           >
             <Trash2 size={18} />
           </button>
@@ -39,18 +47,21 @@ export const ProjectsForm: React.FC = () => {
             value={p.name}
             onChange={(e) => updateProject(p.id, { name: e.target.value })}
             placeholder={t.projectName}
+            aria-label={t.projectName}
             className="w-full p-2 border rounded"
           />
           <input
             value={p.link}
             onChange={(e) => updateProject(p.id, { link: e.target.value })}
             placeholder={t.projectLink}
+            aria-label={t.projectLink}
             className="w-full p-2 border rounded"
           />
           <textarea
             value={p.description}
             onChange={(e) => updateProject(p.id, { description: e.target.value })}
             placeholder={t.description}
+            aria-label={t.description}
             rows={3}
             className="w-full p-2 border rounded"
           />

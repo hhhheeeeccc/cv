@@ -7,11 +7,13 @@ export const LanguageSwitcher: React.FC = () => {
 
   return (
     <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border-b print:hidden">
-      <Languages size={18} className="text-gray-500" />
+      <Languages size={18} className="text-gray-500" aria-hidden="true" />
       <div className="flex bg-white border rounded p-1">
         <button
           onClick={() => setLanguage('en')}
-          className={`px-3 py-1 text-xs font-bold rounded ${
+          aria-label="Switch to English"
+          aria-pressed={language === 'en'}
+          className={`px-3 py-1 text-xs font-bold rounded transition-colors ${
             language === 'en' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
@@ -19,7 +21,9 @@ export const LanguageSwitcher: React.FC = () => {
         </button>
         <button
           onClick={() => setLanguage('ar')}
-          className={`px-3 py-1 text-xs font-bold rounded ${
+          aria-label="التحويل إلى العربية"
+          aria-pressed={language === 'ar'}
+          className={`px-3 py-1 text-xs font-bold rounded transition-colors ${
             language === 'ar' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
