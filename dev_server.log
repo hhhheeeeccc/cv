@@ -1,10 +1,15 @@
 
-> cv-builder@0.0.0 dev /app
+> cv-builder@0.0.0 dev
 > vite
 
 
-  VITE v5.4.21  ready in 297 ms
+  VITE v5.4.21  ready in 285 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
- ELIFECYCLE  Command failed.
+9:21:16 PM [vite] hmr update /src/App.tsx, /src/index.css
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+9:22:10 PM [vite] hmr update /src/App.tsx, /src/index.css
