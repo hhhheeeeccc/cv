@@ -1,4 +1,4 @@
-// Reading this as: Task management interface for professional users, with a clean SaaS language, leaning toward a balanced functional layout with subtle motion and neutral aesthetics.
+// Reading this as: B2B high-precision task management interface, leaning toward Linear-style minimalist language, with restrained motion and a focus on typographic hierarchy.
 import React, { useState, useMemo } from 'react';
 import {
   Plus,
@@ -10,7 +10,11 @@ import {
   Clock,
   Trash2,
   Filter,
-  ArrowUpDown, ListChecks
+  ArrowUpDown,
+  LayoutGrid,
+  List as ListIcon,
+  ChevronRight,
+  Hash
 } from 'lucide-react';
 import './task_manager_modal.scss';
 
@@ -27,66 +31,69 @@ export interface Task {
   priority: TaskPriority;
   dueDate?: string;
   createdAt: string;
+  assignee?: string;
 }
 
 // --- Mock Data ---
 
 const MOCK_TASKS: Task[] = [
   {
-    id: '1',
+    id: 'TSK-101',
     title: 'Review design guidelines',
-    description: 'Assimilate the rules in DESIGN_TASTE.md for the new task manager component.',
+    description: 'Ensure compliance with DESIGN_TASTE.md for the new task manager component.',
     status: 'completed',
     priority: 'high',
     dueDate: '2024-06-20',
     createdAt: '2024-06-19',
+    assignee: 'Jules'
   },
   {
-    id: '2',
+    id: 'TSK-102',
     title: 'Implement RTL support',
-    description: 'Use logical CSS properties for seamless RTL/LTR switching.',
+    description: 'Apply logical CSS properties to handle bidirectional layouts seamlessly.',
     status: 'in-progress',
     priority: 'high',
     dueDate: '2024-06-21',
     createdAt: '2024-06-19',
+    assignee: 'Jules'
   },
   {
-    id: '3',
+    id: 'TSK-103',
     title: 'Refactor Task List view',
-    description: 'Build the main Task List view inside task_manager_modal.tsx with Taste-Skill dials.',
+    description: 'Migrate to a high-density, professional grid layout with refined typography.',
     status: 'todo',
     priority: 'medium',
     dueDate: '2024-06-22',
     createdAt: '2024-06-19',
+    assignee: 'Jules'
   },
   {
-    id: '4',
-    title: 'Finalize SCSS styles',
-    description: 'Apply sophisticated neutral colors and smooth motion transitions.',
+    id: 'TSK-104',
+    title: 'Finalize SCSS tokens',
+    description: 'Sync Zinc-based neutral palette across all component states.',
     status: 'todo',
     priority: 'low',
     dueDate: '2024-06-23',
     createdAt: '2024-06-19',
+    assignee: 'Jules'
   }
 ];
 
 // --- Sub-components ---
 
-interface PriorityBadgeProps {
-  priority: TaskPriority;
-}
-
-const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority }) => {
-  const styles = {
-    low: 'bg-slate-100 text-slate-600 border-slate-200',
-    medium: 'bg-amber-50 text-amber-700 border-amber-200',
-    high: 'bg-rose-50 text-rose-700 border-rose-200',
+const PriorityIndicator: React.FC<{ priority: TaskPriority }> = ({ priority }) => {
+  const colors = {
+    low: 'text-zinc-400',
+    medium: 'text-amber-500',
+    high: 'text-rose-500',
   };
 
   return (
-    <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${styles[priority]}`}>
-      {priority.charAt(0).toUpperCase() + priority.slice(1)}
-    </span>
+    <div className="flex gap-0.5">
+      <div className={`w-1 h-3 rounded-full ${priority === 'low' || priority === 'medium' || priority === 'high' ? colors[priority] : 'bg-zinc-200'} bg-current opacity-40`} />
+      <div className={`w-1 h-3 rounded-full ${priority === 'medium' || priority === 'high' ? colors[priority] : 'bg-zinc-200'} bg-current opacity-60`} />
+      <div className={`w-1 h-3 rounded-full ${priority === 'high' ? colors[priority] : 'bg-zinc-200'} bg-current`} />
+    </div>
   );
 };
 
@@ -96,166 +103,172 @@ export const TaskManagerModal: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(MOCK_TASKS);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<TaskStatus | 'all'>('all');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
-      const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           task.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const query = searchQuery.toLowerCase();
+      const matchesSearch = task.title.toLowerCase().includes(query) ||
+                           task.description.toLowerCase().includes(query) ||
+                           task.id.toLowerCase().includes(query);
       const matchesFilter = filterStatus === 'all' || task.status === filterStatus;
       return matchesSearch && matchesFilter;
     });
   }, [tasks, searchQuery, filterStatus]);
 
-  const toggleTaskStatus = (id: string) => {
-    setTasks(prev => prev.map(task => {
-      if (task.id === id) {
-        const nextStatus: TaskStatus = task.status === 'completed' ? 'todo' : 'completed';
-        return { ...task, status: nextStatus };
-      }
-      return task;
-    }));
-  };
-
-  const deleteTask = (id: string) => {
-    if (confirm('Are you sure you want to delete this task?')) {
-      setTasks(prev => prev.filter(task => task.id !== id));
-    }
+  const toggleStatus = (id: string) => {
+    setTasks(prev => prev.map(t => t.id === id ? {
+      ...t,
+      status: t.status === 'completed' ? 'todo' : 'completed'
+    } : t));
   };
 
   return (
-    <div className="task-manager-backdrop">
-      <div className="task-manager-container" role="dialog" aria-labelledby="modal-title">
-        {/* Header */}
-        <header className="task-manager-header">
-          <div>
-            <h1 id="modal-title" className="text-xl font-semibold text-zinc-900 tracking-tight">
-              Task Manager
-            </h1>
-            <p className="text-sm text-zinc-500 mt-1">
-              Manage your project objectives and daily tasks.
-            </p>
-          </div>
-          <button className="btn-primary">
-            <Plus size={18} />
-            <span>New Task</span>
-          </button>
-        </header>
-
-        {/* Toolbar */}
-        <div className="task-manager-toolbar">
-          <div className="search-wrapper">
-            <Search className="search-icon" size={16} />
-            <input
-              type="text"
-              placeholder="Search tasks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
+    <div className="tm-overlay">
+      <div className="tm-modal" role="dialog" aria-modal="true">
+        {/* Navigation / Header */}
+        <aside className="tm-sidebar">
+          <div className="tm-logo-area">
+            <div className="tm-logo-mark">
+              <Hash size={18} />
+            </div>
+            <span className="tm-logo-text">Workspace</span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="filter-group">
-              <Filter size={14} className="text-zinc-400" />
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="filter-select"
-              >
-                <option value="all">All Status</option>
-                <option value="todo">To Do</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-              </select>
+          <nav className="tm-nav">
+            <button className="tm-nav-item is-active">
+              <ListIcon size={18} />
+              <span>All Tasks</span>
+              <span className="tm-nav-count">{tasks.length}</span>
+            </button>
+            <button className="tm-nav-item">
+              <Clock size={18} />
+              <span>Recent</span>
+            </button>
+            <button className="tm-nav-item">
+              <CheckCircle2 size={18} />
+              <span>Completed</span>
+            </button>
+          </nav>
+
+          <div className="mt-auto p-4 border-t border-zinc-100">
+             <div className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-zinc-50 cursor-pointer transition-colors">
+               <div className="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center text-[10px] font-bold">J</div>
+               <span className="text-xs font-medium text-zinc-700">Jules Manager</span>
+             </div>
+          </div>
+        </aside>
+
+        <main className="tm-main">
+          <header className="tm-top-bar">
+            <div className="flex items-center gap-3">
+              <h2 className="text-sm font-semibold text-zinc-900">Task Overview</h2>
+              <ChevronRight size={14} className="text-zinc-300" />
+              <span className="text-xs text-zinc-500 font-medium">Sprint 24</span>
             </div>
 
-            <button className="btn-ghost">
-              <ArrowUpDown size={16} />
-            </button>
-          </div>
-        </div>
+            <div className="flex items-center gap-2">
+              <div className="tm-view-toggle">
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`tm-toggle-btn ${viewMode === 'list' ? 'is-active' : ''}`}
+                >
+                  <ListIcon size={14} />
+                </button>
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`tm-toggle-btn ${viewMode === 'grid' ? 'is-active' : ''}`}
+                >
+                  <LayoutGrid size={14} />
+                </button>
+              </div>
+              <button className="tm-btn-primary">
+                <Plus size={16} />
+                <span>Issue</span>
+              </button>
+            </div>
+          </header>
 
-        {/* Task List */}
-        <main className="task-manager-content">
-          {filteredTasks.length > 0 ? (
-            <ul className="task-list">
-              {filteredTasks.map((task) => (
-                <li key={task.id} className={`task-item ${task.status === 'completed' ? 'is-completed' : ''}`}>
-                  <div className="task-item-main">
+          <div className="tm-toolbar">
+            <div className="tm-search">
+              <Search size={14} className="tm-search-icon" />
+              <input
+                type="text"
+                placeholder="Filter issues..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="tm-search-input"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button className="tm-toolbar-btn">
+                <Filter size={14} />
+                <span>Status</span>
+              </button>
+              <button className="tm-toolbar-btn">
+                <ArrowUpDown size={14} />
+                <span>Priority</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="tm-content">
+            <div className="tm-list-header">
+              <div className="tm-col-status">Status</div>
+              <div className="tm-col-id">ID</div>
+              <div className="tm-col-title">Title</div>
+              <div className="tm-col-priority">Priority</div>
+              <div className="tm-col-date">Due Date</div>
+            </div>
+
+            <div className="tm-list-body">
+              {filteredTasks.map(task => (
+                <div key={task.id} className={`tm-row ${task.status === 'completed' ? 'is-completed' : ''}`}>
+                  <div className="tm-col-status">
                     <button
-                      onClick={() => toggleTaskStatus(task.id)}
-                      className="task-status-toggle"
-                      aria-label={task.status === 'completed' ? 'Mark as incomplete' : 'Mark as complete'}
+                      onClick={() => toggleStatus(task.id)}
+                      className="tm-status-indicator"
                     >
                       {task.status === 'completed' ? (
-                        <CheckCircle2 size={20} className="text-emerald-500" />
+                        <CheckCircle2 size={16} className="text-blue-600" />
+                      ) : task.status === 'in-progress' ? (
+                        <Clock size={16} className="text-amber-500" />
                       ) : (
-                        <Circle size={20} className="text-zinc-300" />
+                        <Circle size={16} className="text-zinc-300" />
                       )}
                     </button>
-
-                    <div className="task-details">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="task-title">{task.title}</h3>
-                        <PriorityBadge priority={task.priority} />
-                      </div>
-                      <p className="task-description">{task.description}</p>
-
-                      <div className="task-meta">
-                        {task.dueDate && (
-                          <div className="task-meta-item">
-                            <Calendar size={12} />
-                            <span>{task.dueDate}</span>
-                          </div>
-                        )}
-                        <div className="task-meta-item">
-                          <Clock size={12} />
-                          <span>Created {task.createdAt}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="task-actions">
-                      <button
-                        onClick={() => deleteTask(task.id)}
-                        className="action-btn text-zinc-400 hover:text-rose-500"
-                        aria-label="Delete task"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                      <button className="action-btn text-zinc-400">
-                        <MoreVertical size={16} />
-                      </button>
-                    </div>
                   </div>
-                </li>
+                  <div className="tm-col-id">{task.id}</div>
+                  <div className="tm-col-title">
+                    <span className="tm-task-title-text">{task.title}</span>
+                    <span className="tm-task-desc-peek">{task.description}</span>
+                  </div>
+                  <div className="tm-col-priority">
+                    <PriorityIndicator priority={task.priority} />
+                  </div>
+                  <div className="tm-col-date">
+                    {task.dueDate ? (
+                      <div className="flex items-center gap-1.5 text-zinc-500">
+                        <Calendar size={12} />
+                        <span>{task.dueDate}</span>
+                      </div>
+                    ) : '-'}
+                  </div>
+                </div>
               ))}
-            </ul>
-          ) : (
-            <div className="empty-state">
-              <div className="empty-icon-wrapper">
-                <ListChecks size={40} className="text-zinc-200" />
-              </div>
-              <h3>No tasks found</h3>
-              <p>Try adjusting your search or filters to find what you're looking for.</p>
-            </div>
-          )}
-        </main>
 
-        {/* Footer */}
-        <footer className="task-manager-footer">
-          <div className="text-xs text-zinc-400">
-            {filteredTasks.length} task{filteredTasks.length !== 1 ? 's' : ''} found
+              {filteredTasks.length === 0 && (
+                <div className="tm-empty">
+                  <div className="tm-empty-icon">
+                    <Search size={32} />
+                  </div>
+                  <p className="tm-empty-text">No issues found matching your filters</p>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex gap-4">
-            <button className="text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
-              Keyboard Shortcuts
-            </button>
-            <button className="text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors">
-              Documentation
-            </button>
-          </div>
-        </footer>
+        </main>
       </div>
     </div>
   );
