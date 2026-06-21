@@ -3,7 +3,7 @@
 > vite
 
 
-  VITE v5.4.21  ready in 270 ms
+  VITE v5.4.21  ready in 262 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
@@ -11,4 +11,4 @@ DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be
 
 More info: https://sass-lang.com/d/legacy-js-api
 
-8:59:58 PM [vite] hmr update /src/App.tsx, /src/index.css
+9:10:07 PM [vite] hmr update /src/App.tsx, /src/index.css

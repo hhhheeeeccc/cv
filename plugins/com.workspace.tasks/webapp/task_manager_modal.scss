@@ -373,3 +373,29 @@
 
   &:hover { background: var(--tm-zinc-300); }
 }
+
+@media print {
+  .tm-overlay {
+    position: static;
+    background: white;
+    backdrop-filter: none;
+    padding: 0;
+  }
+  .tm-modal {
+    box-shadow: none;
+    border: none;
+    max-height: none;
+    height: auto;
+    width: 100%;
+  }
+  .tm-sidebar, .tm-top-bar, .tm-toolbar, .tm-actions, .tm-view-toggle, .tm-status-btn {
+    display: none !important;
+  }
+  .tm-main {
+    padding: 2rem;
+  }
+  .tm-row {
+    break-inside: avoid;
+    border-bottom: 1px solid #eee;
+  }
+}

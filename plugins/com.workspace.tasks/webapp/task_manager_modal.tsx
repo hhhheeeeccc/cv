@@ -1,5 +1,5 @@
 // Reading this as: High-precision B2B task interface. Precision: 8, Motion: 3, Variance: 3.
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Plus, Search, Calendar, CheckCircle2,
   Circle, Clock, Filter, ArrowUpDown,
@@ -11,6 +11,7 @@ import './task_manager_modal.scss';
 
 export type TaskStatus = 'todo' | 'in-progress' | 'completed';
 export type TaskPriority = 'low' | 'medium' | 'high';
+export type ViewMode = 'list' | 'grid';
 
 export interface Task {
   id: string; title: string; description: string;
@@ -22,7 +23,17 @@ const NAV_ITEMS = [
   { id: 'all', label: 'All Tasks', icon: ListIcon, count: 4 },
   { id: 'recent', label: 'Recent', icon: Clock },
   { id: 'completed', label: 'Completed', icon: CheckCircle2 }
-];
+] as const;
+
+const VIEW_MODES = [
+  { id: 'list' as const, icon: ListIcon },
+  { id: 'grid' as const, icon: LayoutGrid }
+] as const;
+
+const TOOLBAR_FILTERS = [
+  { id: 'status', label: 'Status', icon: Filter },
+  { id: 'priority', label: 'Priority', icon: ArrowUpDown }
+] as const;
 
 const MOCK_TASKS: Task[] = [
   { id: 'TSK-101', title: 'Review design guidelines', description: 'Assimilate the rules in DESIGN_TASTE.md.', status: 'completed', priority: 'high', dueDate: '2024-06-20', createdAt: '2024-06-19' },
@@ -31,21 +42,26 @@ const MOCK_TASKS: Task[] = [
   { id: 'TSK-104', title: 'Finalize SCSS tokens', description: 'Sync Zinc-based neutral palette across components.', status: 'todo', priority: 'low', dueDate: '2024-06-23', createdAt: '2024-06-19' }
 ];
 
+const COLUMNS = [
+  { id: 'status', label: 'S' },
+  { id: 'id', label: 'ID' },
+  { id: 'title', label: 'Title' },
+  { id: 'priority', label: 'Pri' },
+  { id: 'date', label: 'Due' }
+] as const;
+
 // --- Components ---
 
 const PriorityBars: React.FC<{ priority: TaskPriority }> = ({ priority }) => {
   const isHigh = priority === 'high';
   const isMed = priority === 'medium' || isHigh;
-  const colors = { low: 'text-zinc-300', medium: 'text-amber-500', high: 'text-rose-500' };
+  const color = priority === 'low' ? 'text-zinc-300' : priority === 'medium' ? 'text-amber-500' : 'text-rose-500';
 
   return (
     <div className="flex gap-0.5 items-center">
-      {[1, 2, 3].map(i => {
-        const active = (i === 1) || (i === 2 && isMed) || (i === 3 && isHigh);
-        return (
-          <div key={i} className={`w-1 ${i === 1 ? 'h-2' : i === 2 ? 'h-3' : 'h-4'} rounded-full ${active ? colors[priority] : 'bg-zinc-100'} bg-current`} />
-        );
-      })}
+      <div className={`w-1 h-2 rounded-full text-zinc-300 bg-current`} />
+      <div className={`w-1 h-3 rounded-full ${isMed ? color : 'text-zinc-100'} bg-current`} />
+      <div className={`w-1 h-4 rounded-full ${isHigh ? color : 'text-zinc-100'} bg-current`} />
     </div>
   );
 };
@@ -53,15 +69,21 @@ const PriorityBars: React.FC<{ priority: TaskPriority }> = ({ priority }) => {
 export const TaskManagerModal: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(MOCK_TASKS);
   const [search, setSearch] = useState('');
-  const [view, setView] = useState<'list' | 'grid'>('list');
+  const [view, setView] = useState<ViewMode>('list');
 
-  const filtered = useMemo(() => tasks.filter(t =>
-    t.title.toLowerCase().includes(search.toLowerCase()) || t.id.toLowerCase().includes(search.toLowerCase())
-  ), [tasks, search]);
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    if (!q) return tasks;
+    return tasks.filter(t =>
+      t.title.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
+    );
+  }, [tasks, search]);
 
-  const toggle = (id: string) => setTasks(prev => prev.map(t => t.id === id ? {
-    ...t, status: t.status === 'completed' ? 'todo' : 'completed'
-  } : t));
+  const toggleStatus = useCallback((id: string) => {
+    setTasks(prev => prev.map(t => t.id === id ? {
+      ...t, status: t.status === 'completed' ? 'todo' : 'completed'
+    } : t));
+  }, []);
 
   return (
     <div className="tm-overlay">
@@ -95,8 +117,8 @@ export const TaskManagerModal: React.FC = () => {
             </div>
             <div className="tm-actions">
               <div className="tm-view-toggle">
-                {[ {id:'list', icon:ListIcon}, {id:'grid', icon:LayoutGrid} ].map(v => (
-                  <button key={v.id} onClick={() => setView(v.id as any)}
+                {VIEW_MODES.map(v => (
+                  <button key={v.id} onClick={() => setView(v.id)}
                     className={`tm-toggle-btn ${view === v.id ? 'is-active' : ''}`}><v.icon size={14} /></button>
                 ))}
               </div>
@@ -110,27 +132,25 @@ export const TaskManagerModal: React.FC = () => {
               <input type="text" placeholder="Filter issues..." value={search}
                 onChange={(e) => setSearch(e.target.value)} className="tm-search-input" />
             </div>
-            {['Status', 'Priority'].map(l => (
-              <button key={l} className="tm-filter-btn">
-                {l === 'Status' ? <Filter size={14} /> : <ArrowUpDown size={14} />}
-                <span>{l}</span>
+            {TOOLBAR_FILTERS.map(f => (
+              <button key={f.id} className="tm-filter-btn">
+                <f.icon size={14} />
+                <span>{f.label}</span>
               </button>
             ))}
           </div>
 
           <div className="tm-content">
             <div className="tm-list-header">
-              <div className="tm-col-status">S</div>
-              <div className="tm-col-id">ID</div>
-              <div className="tm-col-title">Title</div>
-              <div className="tm-col-priority">Pri</div>
-              <div className="tm-col-date">Due</div>
+              {COLUMNS.map(col => (
+                <div key={col.id} className={`tm-col-${col.id}`}>{col.label}</div>
+              ))}
             </div>
             <div className="tm-list-body">
               {filtered.map(t => (
                 <div key={t.id} className={`tm-row ${t.status === 'completed' ? 'is-completed' : ''}`}>
                   <div className="tm-col-status">
-                    <button onClick={() => toggle(t.id)} className="tm-status-btn">
+                    <button onClick={() => toggleStatus(t.id)} className="tm-status-btn">
                       {t.status === 'completed' ? <CheckCircle2 size={16} className="text-blue-600" /> :
                        t.status === 'in-progress' ? <Clock size={16} className="text-amber-500" /> :
                        <Circle size={16} className="text-zinc-200" />}
